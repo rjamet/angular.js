@@ -2802,22 +2802,21 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       }
     }
 
+
     function getTrustedContext(node, attrNormalizedName) {
       if (attrNormalizedName == "srcdoc") {
         return $sce.HTML;
       }
       var tag = nodeName_(node);
-      // Among src attributes, allow only img and media tags unrestricted.
-      if (attrNormalizedName == "src" || attrNormalizedName == "ngSrc") {
-        if (["img", "video", "audio", "track"].indexOf(tag) == -1) {
-          return $sce.RESOURCE_URL;
-        }
       // maction[xlink:href] can source SVG.  It's not limited to <maction>.
-      } else if (attrNormalizedName == "xlinkHref" ||
-          (tag == "form" && attrNormalizedName == "action")) {
+      if (attrNormalizedName == "xlinkHref" ||
+          (tag == "form" && attrNormalizedName == "action") ||
+          (tag != "img" && (attrNormalizedName == "src" ||
+                            attrNormalizedName == "ngSrc"))) {
         return $sce.RESOURCE_URL;
       }
     }
+
 
     function addAttrInterpolateDirective(node, directives, value, name, allOrNothing) {
       var trustedContext = getTrustedContext(node, name);
