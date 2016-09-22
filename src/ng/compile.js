@@ -3233,7 +3233,9 @@ function $CompileProvider($provide, $$sanitizeUriProvider) {
       } else if (attrNormalizedName === 'xlinkHref' ||
           (tag === 'form' && attrNormalizedName === 'action') ||
           // links can be stylesheets or imports, which can run script in the current origin
-          (tag === 'link' && attrNormalizedName === 'href')
+          (tag === 'link' && attrNormalizedName === 'href') ||
+          // base href affects relative links behave, it might switch to an evil origin.
+          (tag === 'base' && attrNormalizedName === 'href')
       ) {
         return $sce.RESOURCE_URL;
       }
